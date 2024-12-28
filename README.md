@@ -1,7 +1,7 @@
 # Maya-Unity Production Pipeline
 A custom pipeline for efficient asset management between Maya and Unity. Enables users to edit models in Maya and automatically updates the corresponding asset in Unity, while preserving references and creating a backup of the original model. 
 
-![Maya to Unity](image.png)
+![Maya to Unity](images/image.png)
 Maya with Python script editor open (left) and Unity scene view with debug logs called from OnPreprocessModel() and OnPostProcessAllAssets() from the AssetPostProcessor class. Note: my repo only comes with the Python and C# scripts, not my sample Unity scene. The model is Kotone from Persona 3 Portable on PSP. 
 
 ## Workflow
