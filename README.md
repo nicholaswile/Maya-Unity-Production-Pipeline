@@ -32,7 +32,7 @@ private static string notificationPath = "Assets/Models/update_notification.txt"
 > This workflow only works in the Unity Editor. It won't work in built games.
 
 ## Future work
-I have two main extensions in mind for this solution: supporting Blender workflows (e.g., Blender-Unity), as well as Unreal Engine (e.g., Maya-Unreal). If I see a need for it, then I would consider adding support for other DCCs and game engines. The most likely candidate engine as of now is Godot.
+This could easily be expanded to support other file and asset types, including materials and animations. Beyond that, I have two main extensions in mind for this solution: supporting Blender workflows (e.g., Blender-Unity), as well as Unreal Engine (e.g., Maya-Unreal). If I see a need for it, then I would consider adding support for other DCCs and game engines. The most likely candidate engine as of now is Godot.
 
 ## Bugs
 Sometimes several backup copies are created. For now, be mindful to delete unwanted assets.
