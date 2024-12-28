@@ -6,51 +6,54 @@ using System.Linq;
 
 public class ModelUpdate : AssetPostprocessor
 {
-    private static string notificationPath = "Assets/Models/update_notification.txt";
+    private static string notif_path = "Assets/Models/update_notification.txt";
 
-    // Called before the model is imported
-    void OnPreprocessModel()
+    // Called before the model is imported.
+    private void OnPreprocessModel()
     {
-        if (File.Exists(notificationPath))
+        if (File.Exists(notif_path))
         {
             // Asset path is a field of AssetPostprocessor which is the name of the asset being imported.
-            string modelPath = assetPath;
+            string model_path = assetPath;
 
             // If that asset exists already, then we make a backup copy if it.
-            if (File.Exists(modelPath))
+            if (File.Exists(model_path))
             {
 
                 // Rename the asset. 
-                string directory = Path.GetDirectoryName(modelPath);
-                string fileName = Path.GetFileNameWithoutExtension(modelPath);
-                string extension = Path.GetExtension(modelPath);
+                string directory = Path.GetDirectoryName(model_path);
+                string filename = Path.GetFileNameWithoutExtension(model_path);
+                string extension = Path.GetExtension(model_path);
                 string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-                string oldVersionPath = Path.Combine(directory, $"{fileName}_old_{timestamp}{extension}");
+                string backup_path = model_path.Combine(directory, $"{filename}_backup_{timestamp}{extension}");
 
                 // Create a backup copy of the existing asset before it's overwritten.
-                AssetDatabase.CopyAsset(modelPath, oldVersionPath);
-                Debug.Log($"Backup created for {modelPath}. Old version saved as: {oldVersionPath}");
+                AssetDatabase.CopyAsset(model_path, backup_path);
+                Debug.Log($"Backup created for {model_path}. Old version saved as: {backup_path}");
             }
         }
     }
 
-    // Called when the model is imported
-    static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
+    // Called when the model is imported.
+    private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
     {
-        foreach (string assetPath in importedAssets)
+        // Display all imported assets.
+        foreach (string asset_path in importedAssets)
         {
-            Debug.Log($"Imported asset: {assetPath}");
+            Debug.Log($"Imported asset: {asset_path}");
         }
 
-        if (File.Exists(notificationPath))
+        // Check whether the imported assets come from the Maya scene using the notification file.
+        if (File.Exists(notif_path))
         {
-            foreach (string modelPath in importedAssets.Where(path => path.StartsWith("Assets/Models/") && path.EndsWith(".fbx")))
+            // Import all assets that are models.
+            foreach (string model_path in importedAssets.Where(path => path.StartsWith("Assets/Models/") && path.EndsWith(".fbx")))
             {
-                AssetDatabase.ImportAsset(modelPath, ImportAssetOptions.ForceUpdate);
-                Debug.Log($"Updated model: {modelPath}");
+                AssetDatabase.ImportAsset(model_path, ImportAssetOptions.ForceUpdate);
+                Debug.Log($"Updated model: {model_path}");
             }
 
-            File.Delete(notificationPath);
+            File.Delete(notif_path);
             Debug.Log("Models updated from Maya changes.");
         }
     }
